@@ -15,11 +15,37 @@
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
-        .neon-glow { box-shadow: 0 0 30px rgba(57, 255, 20, 0.4); }
-        .text-neon { color: #39FF14; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); }
-        .bg-neon { background-color: #39FF14; }
-        .border-neon { border-color: #39FF14; }
-        .ambient-glow { background: radial-gradient(circle at 50% -10%, rgba(57, 255, 20, 0.05), transparent 40%); }
+
+        /* Estilos Neón y Botones Uniformes */
+        .text-neon {
+            color: #39FF14;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
+        }
+        .bg-neon {
+            background-color: #39FF14;
+        }
+        .border-neon {
+            border-color: #39FF14;
+        }
+
+        .btn-main {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-main:hover:not(:disabled) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(57, 255, 20, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-main:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .ambient-glow {
+            background: radial-gradient(circle at 50% -10%, rgba(57, 255, 20, 0.05), transparent 40%);
+        }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(15px);
@@ -31,10 +57,7 @@
             transform: scale(1.02);
             background: rgba(255, 255, 255, 0.04);
         }
-        .btn-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(57, 255, 20, 0.5);
-        }
+
         .form-input {
             background: #0a0a0a;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -46,105 +69,323 @@
             box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
             outline: none;
         }
+        .form-input[aria-invalid="true"] {
+            border-color: #ff4444;
+        }
+
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
         .animate-scroll {
             display: flex;
-            width: 200%;
-            animation: scroll 20s linear infinite;
+            width: fit-content;
+            animation: scroll 30s linear infinite;
         }
+
         .step-number {
             -webkit-text-stroke: 1px rgba(57, 255, 20, 0.3);
             color: transparent;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ffffff, #39FF14);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Formspree dynamic messages */
+        [data-fs-success], [data-fs-error]:not([data-fs-error*=" "]) {
+            display: none;
+        }
+        .fs-message-active {
+            display: block !important;
         }
     </style>
 </head>
 <body class="ambient-glow min-h-screen">
 
+    <!-- Navegación -->
     <nav class="flex justify-between items-center p-8 max-w-7xl mx-auto bg-black">
-        <div class="text-2xl font-black tracking-tighter">EMERGENT<span class="text-neon">AGENCY</span></div>
-        <button onclick="openModal()" class="text-[10px] font-black tracking-[0.2em] border border-neon text-neon px-6 py-2 rounded-full hover:bg-neon hover:text-black transition-all">ACCESO ANTICIPADO</button>
+        <div class="text-2xl font-black tracking-tighter uppercase">EMERGENT<span class="text-neon">AGENCY</span></div>
+        <button onclick="openModal()" class="btn-main text-[10px] font-black tracking-[0.2em] border border-neon text-neon px-8 py-3 rounded-full uppercase">ACCESO ANTICIPADO</button>
     </nav>
 
+    <!-- Encabezado -->
     <header class="max-w-6xl mx-auto text-center py-24 md:py-36 px-6 bg-black">
         <div class="inline-block border border-white/20 px-4 py-1 rounded-full text-[10px] font-black tracking-[0.3em] mb-10 text-slate-400 uppercase">
-            Producción musical "premium accesible" (Madrid)
+            Producción musical "premium accesible" en Madrid
         </div>
         <h1 class="text-5xl md:text-8xl font-black mb-8 leading-[0.95] tracking-tight">
             TU CANCIÓN LISTA PARA <br><span class="text-neon italic underline decoration-white/10">PUBLICAR.</span>
         </h1>
         <p class="text-lg md:text-2xl text-slate-400 mb-14 max-w-3xl mx-auto leading-relaxed font-medium">
-            Ayudamos a artistas emergentes en Madrid a sacar música profesional sin gastar más de 150€. Proceso claro, productores confiables y resultados reales.
+            Ayudamos a artistas emergentes a sacar música profesional a un precio accesible. Proceso claro, productores confiables y una canción terminada en tus manos.
         </p>
-        <button onclick="openModal()" class="bg-neon text-black font-black py-6 px-14 rounded-full text-xl neon-glow btn-hover transition-all tracking-tight uppercase">
-            Quiero mi track listo
-        </button>
+        <div class="flex justify-center">
+            <button onclick="openModal()" class="btn-main bg-neon text-black font-black py-6 px-14 rounded-full text-xl transition-all tracking-tight uppercase">
+                QUIERO MI TRACK LISTO
+            </button>
+        </div>
     </header>
 
+    <!-- Tira en movimiento -->
+    <div class="overflow-hidden bg-neon py-4 border-y border-black">
+        <div class="animate-scroll whitespace-nowrap flex items-center">
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">ADMITIENDO ARTISTAS MADRID BETA •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">PREMIUM ACCESIBLE •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">EMERGE OR DIE •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">PRODUCCIÓN PROFESIONAL •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">CONECTANDO TALENTO •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">ADMITIENDO ARTISTAS MADRID BETA •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">PREMIUM ACCESIBLE •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">EMERGE OR DIE •</span>
+            <span class="text-black font-black text-2xl px-4 uppercase italic tracking-tighter">PRODUCCIÓN PROFESIONAL •</span>
+        </div>
+    </div>
+
+    <!-- Sección de Problemas -->
     <section class="py-24 px-6 border-t border-white/5 bg-black">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-            <div class="p-10 glass-card rounded-3xl">
-                <span class="text-neon text-xs font-black tracking-widest block mb-4 uppercase">Costes altos</span>
-                <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Producir un tema profesional me cuesta el sueldo de un mes. Es inviable."</p>
-            </div>
-            <div class="p-10 glass-card rounded-3xl">
-                <span class="text-neon text-xs font-black tracking-widest block mb-4 uppercase">Incertidumbre</span>
-                <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Buscar productor en redes es un caos: tiempos largos y mala comunicación."</p>
-            </div>
-            <div class="p-10 glass-card rounded-3xl">
-                <span class="text-neon text-xs font-black tracking-widest block mb-4 uppercase">Miedo al fracaso</span>
-                <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Tengo letras guardadas que nunca salen por miedo a que suenen mal."</p>
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-xs font-black mb-20 tracking-[0.4em] text-slate-600 uppercase">¿Por qué sigues estancado?</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="p-10 glass-card rounded-3xl text-left">
+                    <span class="text-neon text-xs font-black tracking-widest block mb-4">COSTES ALTOS</span>
+                    <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Producir un tema profesional me cuesta el sueldo de un mes. Es inviable."</p>
+                </div>
+                <div class="p-10 glass-card rounded-3xl text-left">
+                    <span class="text-neon text-xs font-black tracking-widest block mb-4">INCERTIDUMBRE</span>
+                    <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Buscar productor en redes es un caos: tiempos largos y mala comunicación."</p>
+                </div>
+                <div class="p-10 glass-card rounded-3xl text-left">
+                    <span class="text-neon text-xs font-black tracking-widest block mb-4">LANZAMIENTOS VACÍOS</span>
+                    <p class="text-sm text-slate-300 leading-relaxed font-semibold italic">"Tengo letras guardadas que nunca salen por miedo a que suenen mal."</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <div class="py-12 bg-neon text-black overflow-hidden relative">
-        <div class="animate-scroll">
-            <div class="flex gap-12 items-center px-12 text-2xl font-black uppercase tracking-tighter">
-                <span>Produce sin arruinarte</span> <span class="text-4xl">•</span>
-                <span>Premium Accesible</span> <span class="text-4xl">•</span>
-                <span>Madrid Scene</span> <span class="text-4xl">•</span>
-                <span>Industria Justa</span> <span class="text-4xl">•</span>
-                <span>Produce sin arruinarte</span> <span class="text-4xl">•</span>
-                <span>Premium Accesible</span>
+    <!-- Sección de Red de Contactos -->
+    <section class="py-24 px-6 bg-black relative overflow-hidden">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="order-1">
+                <h2 class="text-xs font-black mb-6 tracking-[0.4em] text-neon uppercase italic">Conexión Madrid</h2>
+                <h3 class="text-4xl md:text-6xl font-black mb-8 leading-tight uppercase">
+                    No estás solo en esto. <br>
+                    <span class="gradient-text">Conecta con tu círculo.</span>
+                </h3>
+                <p class="text-slate-400 text-lg mb-10 leading-relaxed max-w-lg">
+                    Formar parte de Emergent Agency no es solo contratar una producción. Es entrar en una <strong>red de contactos real</strong> en Madrid.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-[1px] bg-neon"></div>
+                        <p class="text-xs font-black uppercase tracking-widest text-slate-300">Match por estilo musical</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-[1px] bg-neon"></div>
+                        <p class="text-xs font-black uppercase tracking-widest text-slate-300">Impulso de colaboraciones (Featurings)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="order-2 grid grid-cols-2 gap-4">
+                <div class="glass-card p-10 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <div class="text-3xl mb-4">🎤</div>
+                    <p class="text-[10px] font-black text-neon uppercase tracking-[0.2em]">Artistas</p>
+                </div>
+                <div class="glass-card p-10 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <div class="text-3xl mb-4">🎹</div>
+                    <p class="text-[10px] font-black text-neon uppercase tracking-[0.2em]">Beatmakers</p>
+                </div>
+                <div class="glass-card p-10 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <div class="text-3xl mb-4">🎸</div>
+                    <p class="text-[10px] font-black text-neon uppercase tracking-[0.2em]">Músicos</p>
+                </div>
+                <div class="glass-card p-10 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <div class="text-3xl mb-4">🎧</div>
+                    <p class="text-[10px] font-black text-neon uppercase tracking-[0.2em]">Productores</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Pasos -->
+    <section class="py-32 px-6 bg-black border-y border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-xs font-black mb-20 text-center tracking-[0.4em] text-slate-600 uppercase">Tu música en 4 pasos</h2>
+            <div class="grid md:grid-cols-4 gap-12 text-center md:text-left">
+                <div class="relative">
+                    <div class="text-7xl font-black step-number mb-6">01</div>
+                    <h4 class="text-lg font-black mb-2 uppercase">Visión</h4>
+                    <p class="text-sm text-slate-500">Definimos tu sonido y te asignamos al productor ideal.</p>
+                </div>
+                <div class="relative">
+                    <div class="text-7xl font-black step-number mb-6">02</div>
+                    <h4 class="text-lg font-black mb-2 uppercase">Producción</h4>
+                    <p class="text-sm text-slate-500">Sesión de grabación y creación dirigida artísticamente.</p>
+                </div>
+                <div class="relative">
+                    <div class="text-7xl font-black step-number mb-6">03</div>
+                    <h4 class="text-lg font-black mb-2 uppercase">Pulido</h4>
+                    <p class="text-sm text-slate-500">Mezcla y masterización profesional para sonar competitivo.</p>
+                </div>
+                <div class="relative">
+                    <div class="text-7xl font-black step-number mb-6">04</div>
+                    <h4 class="text-lg font-black mb-2 uppercase">Lanzamiento</h4>
+                    <p class="text-sm text-slate-500">Subimos tu música a plataformas. Ya eres un artista publicado.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Perfiles -->
+    <section class="py-20 px-6 max-w-6xl mx-auto bg-black">
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="p-12 glass-card rounded-[2.5rem] relative overflow-hidden group">
+                <div class="flex justify-between items-start mb-8">
+                    <h3 class="text-4xl font-black group-hover:text-neon transition-colors uppercase">Artistas</h3>
+                    <div class="text-neon/10 text-6xl font-black transform group-hover:rotate-12 transition-transform duration-500">🎤</div>
+                </div>
+                <ul class="space-y-6 text-slate-400 font-medium">
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Paquetes desde 50-100€ por canción.</li>
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Elimina el riesgo de "apostar" por desconocidos.</li>
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Siente el orgullo de un track publicado.</li>
+                </ul>
+            </div>
+            <div class="p-12 glass-card rounded-[2.5rem] relative overflow-hidden group">
+                <div class="flex justify-between items-start mb-8">
+                    <h3 class="text-4xl font-black group-hover:text-neon transition-colors uppercase">Productores</h3>
+                    <div class="text-neon/10 text-6xl font-black transform group-hover:-rotate-12 transition-transform duration-500">🎹</div>
+                </div>
+                <ul class="space-y-6 text-slate-400 font-medium">
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Flujo constante de artistas serios en Madrid.</li>
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Gestión de pagos 50/50 asegurada.</li>
+                    <li class="flex items-center gap-4"><span class="w-2 h-2 bg-neon rounded-full"></span> Céntrate en crear, nosotros gestionamos.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-32 px-6 bg-black">
+        <div class="max-w-4xl mx-auto text-center glass-card p-12 md:p-20 rounded-[3rem] border-neon/20">
+            <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight uppercase">¿Listo para el <br><span class="text-neon">siguiente nivel?</span></h2>
+            <p class="text-slate-400 mb-12 text-lg font-medium">Únete a la lista de espera para el lanzamiento oficial en Madrid y asegura tu plaza con precio reducido.</p>
+            
+            <div data-fs-success class="bg-neon/10 border border-neon text-neon p-6 rounded-2xl mb-8 font-black uppercase tracking-tighter">
+                ¡Gracias! Ya estás en la lista. Te contactaremos pronto.
+            </div>
+            <div data-fs-error class="bg-red-500/10 border border-red-500 text-red-500 p-6 rounded-2xl mb-8 font-black uppercase tracking-tighter">
+                Algo ha fallado. Por favor, revisa los datos e inténtalo de nuevo.
+            </div>
+
+            <form id="footer-form" class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+                <div class="flex-1">
+                    <input type="email" name="email" data-fs-field placeholder="Tu mejor email..." class="w-full form-input p-5 rounded-2xl text-center md:text-left" required>
+                    <span data-fs-error="email" class="text-[10px] text-red-500 font-black uppercase tracking-widest mt-2 block"></span>
+                </div>
+                <button type="submit" data-fs-submit-btn class="btn-main bg-neon text-black font-black py-5 px-10 rounded-2xl transition-all uppercase tracking-tighter">
+                    Inscribirme
+                </button>
+            </form>
+            <p class="mt-6 text-[10px] text-slate-600 font-bold tracking-widest uppercase">Plazas limitadas para la fase Beta</p>
+        </div>
+    </section>
+
+    <!-- Pie de Página -->
     <footer class="py-20 bg-black text-center border-t border-white/5">
-        <div class="text-2xl font-black mb-10 tracking-tighter">EMERGENT<span class="text-neon">AGENCY</span></div>
-        <p class="text-slate-600 text-[10px] font-bold tracking-widest uppercase">© 2024 Madrid • Producción Premium Accesible</p>
+        <div class="text-2xl font-black mb-10 tracking-tighter uppercase">EMERGENT<span class="text-neon">AGENCY</span></div>
+        <div class="flex flex-wrap justify-center gap-10 text-[10px] font-black tracking-[0.4em] text-slate-600 uppercase mb-8">
+            <span>Gonzalo Pérez</span>
+            <span>Lucas López</span>
+            <span>Mathias Neustadtl</span>
+            <span>Rodrigo López</span>
+        </div>
+        <div class="flex justify-center mt-8">
+            <button onclick="openModal()" class="btn-main text-[10px] font-black tracking-[0.4em] border border-neon text-neon px-10 py-4 rounded-full uppercase">
+                CONTACTAR AHORA
+            </button>
+        </div>
+        <p class="mt-12 text-slate-800 text-[10px] font-bold tracking-widest uppercase">© 2024 Madrid • Emerge or Die</p>
     </footer>
 
-    <div id="modal" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center z-50 px-4">
-        <div class="bg-black border border-white/10 p-10 rounded-[2rem] max-w-md w-full relative">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white">✕</button>
+    <!-- Modal Formulario Completo -->
+    <div id="modal" class="fixed inset-0 bg-black/98 hidden flex items-center justify-center z-50 px-4">
+        <div class="bg-black border border-white/10 p-10 rounded-[3rem] max-w-xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeModal()" class="absolute top-8 right-8 text-slate-600 hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
             <div id="modalContent">
-                <h2 class="text-3xl font-black text-white mb-6 uppercase">Únete a la <span class="text-neon">Beta</span></h2>
-                <form id="waitlistForm" class="space-y-4">
-                    <input type="text" placeholder="Nombre artístico" class="w-full form-input p-4 rounded-xl" required>
-                    <input type="email" placeholder="Email" class="w-full form-input p-4 rounded-xl" required>
-                    <button type="submit" class="w-full bg-neon text-black font-black py-4 rounded-xl hover:scale-105 transition-all uppercase">Enviar</button>
+                <h2 class="text-4xl font-black text-white leading-tight mb-4 uppercase">Lanzamiento <br><span class="text-neon">Madrid Beta</span></h2>
+                <p class="text-slate-500 mb-10 font-medium text-sm">Estamos seleccionando a los primeros artistas para el paquete de <strong>lanzamiento completo</strong>.</p>
+
+                <div data-fs-success class="bg-neon/10 border border-neon text-neon p-6 rounded-2xl mb-8 font-black uppercase tracking-tighter text-center">
+                    ¡Solicitud recibida! Revisaremos tu perfil.
+                </div>
+
+                <form id="modal-form" class="space-y-4">
+                    <div>
+                        <input type="text" name="artista" data-fs-field placeholder="Nombre artístico" class="w-full form-input p-5 rounded-2xl" required>
+                        <span data-fs-error="artista" class="text-[10px] text-red-500 font-black uppercase tracking-widest mt-1 block px-2"></span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <select name="rol" data-fs-field class="w-full form-input p-5 rounded-2xl appearance-none" required>
+                            <option value="" disabled selected>Tu rol</option>
+                            <option value="artista">Artista</option>
+                            <option value="productor">Productor</option>
+                        </select>
+                        <input type="text" name="genero" data-fs-field placeholder="Género musical" class="w-full form-input p-5 rounded-2xl" required>
+                    </div>
+                    <div>
+                        <input type="email" name="email" data-fs-field placeholder="Tu mejor email" class="w-full form-input p-5 rounded-2xl" required>
+                        <span data-fs-error="email" class="text-[10px] text-red-500 font-black uppercase tracking-widest mt-1 block px-2"></span>
+                    </div>
+                    <button type="submit" data-fs-submit-btn class="w-full bg-neon text-black font-black py-6 rounded-2xl mt-8 transition-transform uppercase tracking-tighter">SOLICITAR ACCESO</button>
+                    <div data-fs-error class="text-[10px] text-red-500 font-black uppercase tracking-widest text-center mt-4"></div>
                 </form>
-            </div>
-            <div id="successMessage" class="hidden text-center py-10">
-                <div class="text-5xl mb-4">⚡</div>
-                <h3 class="text-2xl font-black text-white uppercase">Recibido</h3>
-                <p class="text-slate-400 mt-2">Te contactaremos pronto.</p>
             </div>
         </div>
     </div>
 
+    <!-- Scripts de Formspree -->
     <script>
-        function openModal() { document.getElementById('modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-        document.getElementById('waitlistForm').onsubmit = (e) => {
-            e.preventDefault();
-            document.getElementById('modalContent').classList.add('hidden');
-            document.getElementById('successMessage').classList.remove('hidden');
-        };
+        // Configuración de Formspree
+        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+        
+        // Inicializar el formulario del footer
+        formspree('initForm', { 
+            formElement: '#footer-form', 
+            formId: 'mvzdgpkk',
+            onSuccess: function() {
+                document.querySelector('#footer-form').style.display = 'none';
+            }
+        });
+
+        // Inicializar el formulario del modal
+        formspree('initForm', { 
+            formElement: '#modal-form', 
+            formId: 'mvzdgpkk',
+            onSuccess: function() {
+                document.querySelector('#modal-form').style.display = 'none';
+                setTimeout(closeModal, 3000); // Cerrar tras 3 segundos de éxito
+            }
+        });
+
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
     </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
